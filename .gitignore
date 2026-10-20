@@ -1,2 +1,10 @@
 venv/
+__pycache__/
+*.pyc
+.DS_Store
 
+# Raw HMDA download (about 78 MB) and large generated outputs
+loan_purposes_*.csv
+modeling/calibrated_predictions.csv
+modeling/decisions_with_predictions.csv
+modeling/threshold_cost_summary.csv
