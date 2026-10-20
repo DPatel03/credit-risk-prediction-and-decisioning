@@ -2,6 +2,8 @@
 # Purpose: Train and evaluate a baseline logistic regression
 # using the frozen SQL feature snapshot (features_snapshot_v1)
 
+import os
+
 import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
@@ -15,7 +17,7 @@ from sklearn.impute import SimpleImputer
 # ------------------------------------------------------------
 # Database connection
 # ------------------------------------------------------------
-ENGINE_URI = "postgresql://<username>:<password>@<host>:<port>/<database>"
+ENGINE_URI = os.environ["DATABASE_URL"]
 
 engine = create_engine(ENGINE_URI)
 

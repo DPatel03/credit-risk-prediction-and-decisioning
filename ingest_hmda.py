@@ -1,11 +1,10 @@
+import os
+
 import pandas as pd
 from sqlalchemy import create_engine
 from config import SELECTED_COLUMNS
 
-engine = create_engine(
-        "postgresql://<username>:<password>@<host>:<port>/<database>"
-
-)
+engine = create_engine(os.environ["DATABASE_URL"])
 
 CSV_PATH = "loan_purposes_1-31_year_2024.csv"
 CHUNKSIZE = 200_000

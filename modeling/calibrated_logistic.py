@@ -2,6 +2,8 @@
 # Purpose: Apply probability calibration to the baseline logistic model
 # and compare calibrated vs uncalibrated predictions
 
+import os
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,7 +20,7 @@ from sklearn.impute import SimpleImputer
 # ------------------------------------------------------------
 # Database connection
 # ------------------------------------------------------------
-ENGINE_URI = "postgresql://<username>:<password>@<host>:<port>/<database>"
+ENGINE_URI = os.environ["DATABASE_URL"]
 engine = create_engine(ENGINE_URI)
 
 
@@ -70,7 +72,18 @@ X = pd.get_dummies(
     drop_first=True
 )
 
-y = df["risk_label"].astype(int)
+# Keep only rows with a non-missing risk_label, and align X and y
+mask_labeled = df["risk_label"].notna()
+
+if not mask_labeled.any():
+    raise ValueError(
+        "No rows with non-null risk_label were found. "
+        "Please ensure your SQL pipeline has populated credit_attributes.risk_label "
+        "and rebuilt features_snapshot_v1."
+    )
+
+X = X[mask_labeled].copy()
+y = df.loc[mask_labeled, "risk_label"].astype(int)
 
 
 # ------------------------------------------------------------
